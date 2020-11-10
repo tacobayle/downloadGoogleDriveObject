@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+    - name: Download the Avi software
+      shell: |
+        curl -c ./cookie -s -L "https://drive.google.com/uc?export=download&id={{ googleDriveId }}" > /dev/null ; curl -Lb ./cookie "https://drive.google.com/uc?export=download&confirm=`awk '/download/ {print $NF}' ./cookie`&id={{ googleDriveId }}" -o "{{ outputFile }}"
+      when:
+        - googleDriveId is defined
+        - outputFile is defined
+      tags:
+        - drive
